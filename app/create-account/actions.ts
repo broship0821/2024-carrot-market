@@ -21,7 +21,7 @@ const formSchema = z
         required_error: "적으십시오",
       })
       .min(3, "너무 짧읍니다")
-      .max(100, "너무 깁디다")
+      .max(10, "너무 깁디다")
       .toLowerCase()
       .trim()
       .transform((username) => `${username} 바꿔버리기~`)
