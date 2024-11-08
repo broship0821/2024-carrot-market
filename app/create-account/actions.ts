@@ -1,4 +1,5 @@
 "use server";
+import bcrypt from "bcrypt";
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
@@ -80,9 +81,19 @@ export async function createAccount(prevState: any, formdata: FormData) {
   // refine 에 db 조회하는게 들어가면 safeParseAsync 사용 필요
   if (!result.success) return result.error.flatten();
   else {
-    // hash password
-    // save the user to db
-    // log the user in
+    const hashedPassword = await bcrypt.hash(result.data.password, 12);
+    const user = await db.user.create({
+      data: {
+        username: result.data.username,
+        email: result.data.email,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+      },
+    });
+    console.log(user);
+
     // redirect "/home"
   }
 }
