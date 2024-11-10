@@ -80,7 +80,7 @@ export async function createAccount(prevState: any, formdata: FormData) {
     confirm_password: formdata.get("confirm_password"),
   };
   // const result = formSchema.safeParse(data);
-  const result = await formSchema.safeParseAsync(data);
+  const result = await formSchema.spa(data);
   // refine 에 db 조회하는게 들어가면 safeParseAsync 사용 필요
   if (!result.success) return result.error.flatten();
   else {
