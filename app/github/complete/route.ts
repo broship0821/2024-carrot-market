@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import getSession from "@/lib/session";
+import getSession, { saveSession } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -40,14 +40,36 @@ export async function GET(request: NextRequest) {
     },
   });
   if (user) {
-    const session = await getSession();
-    session.id = user.id;
-    await session.save();
+    await saveSession(user.id);
     return redirect("/profile");
   }
+
+  let username = login;
+  const duplicateUser = await db.user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (duplicateUser) {
+    username = `${login}_${id}`;
+  }
+
+  // const userEmailResponse = await fetch("https://api.github.com/user/emails", {
+  //   headers: {
+  //     Authorization: `Bearer ${access_token}`,
+  //   },
+  //   cache: "no-cache",
+  // });
+  // console.log(1111111111111);
+  // console.log(await userEmailResponse.json());
+  // const {email} = await userEmailResponse.json()[0];
+
   const newUser = await db.user.create({
     data: {
-      username: login,
+      username,
       github_id: id + "",
       avatar: avatar_url,
     },
@@ -55,8 +77,6 @@ export async function GET(request: NextRequest) {
       id: true,
     },
   });
-  const session = await getSession();
-  session.id = newUser.id;
-  await session.save();
+  await saveSession(newUser.id);
   return redirect("/profile");
 }
