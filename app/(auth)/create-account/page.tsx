@@ -1,10 +1,10 @@
 "use client";
 
-import Button from "../components/button";
-import SocialLogin from "../components/social-login";
+import Button from "../../../components/button";
+import SocialLogin from "../../../components/social-login";
 import { useFormState } from "react-dom";
 import { createAccount } from "./actions";
-import Input from "../components/input";
+import Input from "../../../components/input";
 import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 
 export default function CreateAccount() {
