@@ -71,6 +71,12 @@ export default async function ProductDetail({
         <span className="font-semibold text-xl">
           {formatToWon(product.price)}원
         </span>
+        {isOwner ? (
+          <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
+            삭제
+          </button>
+        ) : null}
+        // TODO: 삭제 후 리스트로 보내기, 로그아웃 액션 참조
         <Link
           className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold"
           href={``}
